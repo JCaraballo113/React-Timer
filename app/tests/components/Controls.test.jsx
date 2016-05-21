@@ -28,4 +28,30 @@ describe('Controls Tests', () => {
       expect($startButton.length).toBe(1);
     });
   });
+
+  describe('onStatusChange', () => {
+    it('should be called with paused when Pause button is clicked', () => {
+      var spy = expect.createSpy();
+      var controls = TestUtils.renderIntoDocument(<Controls countdownStatus="started" onStatusChange={spy}/>);
+      var pauseBtn = controls.refs.pauseBtn;
+      TestUtils.Simulate.click(pauseBtn);
+
+      expect(spy).toHaveBeenCalledWith('paused');
+    });
+
+    it('should be called with started when Start button is clicked', () => {
+      var spy = expect.createSpy();
+      var controls = TestUtils.renderIntoDocument(<Controls countdownStatus="paused" onStatusChange={spy}/>);
+      var startBtn = controls.refs.startBtn;
+      TestUtils.Simulate.click(startBtn);
+
+      expect(spy).toHaveBeenCalledWith('started');
+    });
+
+    it('should return a function provided by parent component', () => {
+      var controls = TestUtils.renderIntoDocument(<Controls countdownStatus="paused"/>);
+      var result = controls.onStatusChange('paused');
+      expect(result).toBeA('function');
+    });
+  });
 });
